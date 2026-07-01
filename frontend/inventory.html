@@ -1,0 +1,324 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Inventory Management | MedLife</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e1e3e4; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #c2c6d4; }
+        
+        /* Zebra striping from design system */
+        .zebra-row:nth-child(even) { background-color: #f3f4f5; }
+    </style>
+<!-- Tailwind Config Injection -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface-dim": "#d9dadb",
+                    "inverse-primary": "#acc7ff",
+                    "primary-container": "#0056b3",
+                    "background": "#f8f9fa",
+                    "primary": "#003f87",
+                    "on-tertiary-fixed-variant": "#92001f",
+                    "on-primary-fixed-variant": "#004491",
+                    "on-primary-container": "#bbd0ff",
+                    "tertiary": "#88001c",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed": "#002106",
+                    "surface-container-low": "#f3f4f5",
+                    "surface-variant": "#e1e3e4",
+                    "primary-fixed-dim": "#acc7ff",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#ffc0bf",
+                    "surface-container": "#edeeef",
+                    "surface-container-highest": "#e1e3e4",
+                    "secondary-fixed": "#83fc8e",
+                    "on-secondary-container": "#007327",
+                    "inverse-surface": "#2e3132",
+                    "on-primary": "#ffffff",
+                    "primary-fixed": "#d7e2ff",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#001a40",
+                    "error-container": "#ffdad6",
+                    "outline": "#727784",
+                    "secondary-container": "#80f98b",
+                    "on-surface-variant": "#424752",
+                    "surface-bright": "#f8f9fa",
+                    "secondary": "#006e25",
+                    "on-secondary-fixed-variant": "#00531a",
+                    "on-background": "#191c1d",
+                    "tertiary-fixed-dim": "#ffb3b2",
+                    "outline-variant": "#c2c6d4",
+                    "tertiary-container": "#b10f2b",
+                    "surface": "#f8f9fa",
+                    "on-surface": "#191c1d",
+                    "on-tertiary-fixed": "#410008",
+                    "surface-container-high": "#e7e8e9",
+                    "secondary-fixed-dim": "#66df75",
+                    "surface-tint": "#115cb9",
+                    "on-secondary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#ffdad9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xs": "0.25rem",
+                    "gutter": "1rem",
+                    "sm": "0.5rem",
+                    "base": "4px",
+                    "lg": "1.5rem",
+                    "margin-mobile": "1rem",
+                    "xl": "2.5rem",
+                    "margin-desktop": "2rem",
+                    "md": "1rem"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "headline-md-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col md:flex-row">
+<!-- SideNavBar (Desktop) -->
+<aside class="hidden md:flex flex-col h-full py-lg px-md bg-surface-container-lowest border-r border-surface-variant w-64 fixed left-0 top-0 bottom-0 z-40">
+<div class="mb-xl px-2">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">MedLife</h1>
+<p class="text-on-surface-variant font-label-md text-label-md">Unit 4-B North Wing</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Inventory
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-label-md text-label-md hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                Add Medicine
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-label-md text-label-md hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+                Stock Alerts
+            </a>
+</nav>
+<div class="mt-auto border-t border-surface-variant pt-lg space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-label-md text-label-md hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-label-md text-label-md hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                Support
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 pb-24 md:pb-8 bg-background min-h-screen overflow-y-auto overflow-x-hidden">
+<!-- TopNavBar (Integrated Layout) -->
+<header class="flex justify-between items-center w-full px-gutter max-w-[1440px] mx-auto h-16 bg-surface border-b border-surface-variant sticky top-0 z-30">
+<div class="flex items-center gap-lg">
+<span class="font-headline-md text-headline-md font-bold text-primary">MedLife</span>
+<div class="hidden sm:flex items-center bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant">
+<span class="material-symbols-outlined text-outline text-[20px] mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md font-body-md w-64 p-0" placeholder="Search pharmacy stock..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-primary">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-primary">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<div class="max-w-[1440px] mx-auto p-gutter lg:p-xl space-y-lg">
+<!-- Page Header & Actions -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-md">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Central Inventory</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage 1,420 medical SKUs across all facility wings.</p>
+</div>
+<div class="flex items-center gap-sm">
+<button class="px-lg py-2 border border-primary text-primary font-label-md text-label-md rounded-lg flex items-center gap-2 hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="file_download">file_download</span>
+                        Export CSV
+                    </button>
+<button class="px-lg py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg flex items-center gap-2 hover:opacity-90 transition-all shadow-sm" style="transform: scale(1);">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                        New Entry
+                    </button>
+</div>
+</div>
+<!-- Stats Bar (Visual Thermometers/Alerts) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<div class="bg-white border border-surface-variant p-md rounded-xl flex items-center gap-md">
+<div class="w-12 h-12 bg-error-container text-on-error-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Expired Products</p>
+<p class="font-headline-sm text-headline-sm font-bold text-error">12 Units</p>
+</div>
+</div>
+<div class="bg-white border border-surface-variant p-md rounded-xl flex items-center gap-md">
+<div class="w-12 h-12 bg-tertiary-container text-on-tertiary-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="trending_down">trending_down</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Low Stock Levels</p>
+<p class="font-headline-sm text-headline-sm font-bold text-tertiary-container">48 Items</p>
+</div>
+</div>
+<div class="bg-white border border-surface-variant p-md rounded-xl flex items-center gap-md">
+<div class="w-12 h-12 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Stock Health</p>
+<p class="font-headline-sm text-headline-sm font-bold text-secondary">94% Optimal</p>
+</div>
+</div>
+</div>
+<!-- Inventory Data Table -->
+<div class="bg-white border border-surface-variant rounded-xl shadow-sm overflow-x-auto">
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse min-w-[1200px]">
+<thead>
+<tr class="bg-surface-container-low border-b border-surface-variant"><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase">Medicine Details</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase">Serial / Batch</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase">In-Stock Date</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase">Expiry Date</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase text-right">Quantity</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase">Location</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase">Sourced From</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase text-right">Price</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase text-center">Actions</th></tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<!-- Row 1: Low Stock Alert -->
+<tr class="zebra-row hover:bg-surface-container-highest transition-colors border-b border-surface-variant"><td class="px-md py-4"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]" data-icon="pill">pill</span></div><div><p class="font-semibold text-on-surface">Amoxicillin 500mg</p></div></div></td><td class="px-md py-4"><p class="text-xs font-mono text-outline">SN: 44921-00</p><p class="text-xs font-mono text-outline">Batch: #AX-2024</p></td><td class="px-md py-4 text-on-surface-variant">Oct 12, 2023</td><td class="px-md py-4 font-medium text-on-surface">Mar 15, 2025</td><td class="px-md py-4 text-right"><div class="flex flex-col items-end"><span class="text-tertiary font-bold">12 units</span><div class="w-16 h-1 bg-surface-variant rounded-full mt-1 overflow-hidden"><div class="h-full bg-tertiary-container" style="width: 25%"></div></div><span class="text-[10px] text-tertiary uppercase mt-1">Low Stock</span></div></td><td class="px-md py-4"><span class="px-2 py-1 bg-surface-container-high rounded text-xs">Shelf B-12</span></td><td class="px-md py-4 text-on-surface-variant">Global Pharma Co.</td><td class="px-md py-4 text-right font-medium">$12.50 / unit</td><td class="px-md py-4 text-center"><div class="flex justify-center gap-2"><button class="p-1.5 hover:bg-primary-fixed rounded text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span></button><button class="p-1.5 hover:bg-error-container rounded text-error transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span></button></div></td></tr>
+<!-- Row 2: Expired Alert -->
+<tr class="zebra-row hover:bg-surface-container-highest transition-colors border-b border-surface-variant"><td class="px-md py-4"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]" data-icon="medication">medication</span></div><div><p class="font-semibold text-on-surface">Insulin Glargine</p></div></div></td><td class="px-md py-4"><p class="text-xs font-mono text-outline">SN: 88122-45</p><p class="text-xs font-mono text-outline">Batch: #IN-9912</p></td><td class="px-md py-4 text-on-surface-variant">Nov 02, 2023</td><td class="px-md py-4"><div class="flex items-center gap-1.5 text-error"><span class="material-symbols-outlined text-[16px]" data-icon="error">error</span><span class="font-bold">Jan 01, 2024</span></div></td><td class="px-md py-4 text-right"><div class="flex flex-col items-end"><span class="text-on-surface">5 units</span><div class="w-16 h-1 bg-surface-variant rounded-full mt-1 overflow-hidden"><div class="h-full bg-error" style="width: 10%"></div></div><span class="text-[10px] text-error uppercase mt-1">Expired</span></div></td><td class="px-md py-4"><span class="px-2 py-1 bg-surface-container-high rounded text-xs">Cold-Storage C</span></td><td class="px-md py-4 text-on-surface-variant">Novo Dist.</td><td class="px-md py-4 text-right font-medium">$85.00 / unit</td><td class="px-md py-4 text-center"><div class="flex justify-center gap-2"><button class="p-1.5 hover:bg-primary-fixed rounded text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span></button><button class="p-1.5 hover:bg-error-container rounded text-error transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span></button></div></td></tr>
+<!-- Row 3: Healthy Stock -->
+<tr class="zebra-row hover:bg-surface-container-highest transition-colors border-b border-surface-variant"><td class="px-md py-4"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]" data-icon="vaccines">vaccines</span></div><div><p class="font-semibold text-on-surface">Lisinopril 10mg</p></div></div></td><td class="px-md py-4"><p class="text-xs font-mono text-outline">SN: 12102-09</p><p class="text-xs font-mono text-outline">Batch: #LP-5562</p></td><td class="px-md py-4 text-on-surface-variant">Jan 15, 2024</td><td class="px-md py-4 font-medium text-on-surface">Dec 12, 2026</td><td class="px-md py-4 text-right"><div class="flex flex-col items-end"><span class="text-on-surface">250 units</span><div class="w-16 h-1 bg-surface-variant rounded-full mt-1 overflow-hidden"><div class="h-full bg-secondary" style="width: 85%"></div></div><span class="text-[10px] text-secondary uppercase mt-1">Optimal</span></div></td><td class="px-md py-4"><span class="px-2 py-1 bg-surface-container-high rounded text-xs">Shelf A-04</span></td><td class="px-md py-4 text-on-surface-variant">MediDirect</td><td class="px-md py-4 text-right font-medium">$4.20 / unit</td><td class="px-md py-4 text-center"><div class="flex justify-center gap-2"><button class="p-1.5 hover:bg-primary-fixed rounded text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span></button><button class="p-1.5 hover:bg-error-container rounded text-error transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span></button></div></td></tr>
+<!-- Row 4: Pricing focus -->
+<tr class="zebra-row hover:bg-surface-container-highest transition-colors border-b border-surface-variant"><td class="px-md py-4"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]" data-icon="emergency_home">emergency_home</span></div><div><p class="font-semibold text-on-surface">Epinephrine Pen</p></div></div></td><td class="px-md py-4"><p class="text-xs font-mono text-outline">SN: 77201-11</p><p class="text-xs font-mono text-outline">Batch: #EP-2024</p></td><td class="px-md py-4 text-on-surface-variant">Feb 22, 2024</td><td class="px-md py-4 font-medium text-on-surface">Oct 30, 2025</td><td class="px-md py-4 text-right"><div class="flex flex-col items-end"><span class="text-on-surface font-bold">45 units</span><div class="w-16 h-1 bg-surface-variant rounded-full mt-1 overflow-hidden"><div class="h-full bg-secondary" style="width: 60%"></div></div><span class="text-[10px] text-secondary uppercase mt-1">Optimal</span></div></td><td class="px-md py-4"><span class="px-2 py-1 bg-surface-container-high rounded text-xs">Emergency Box 1</span></td><td class="px-md py-4 text-on-surface-variant">CareSupply Inc.</td><td class="px-md py-4 text-right font-medium">$112.50 / unit</td><td class="px-md py-4 text-center"><div class="flex justify-center gap-2"><button class="p-1.5 hover:bg-primary-fixed rounded text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span></button><button class="p-1.5 hover:bg-error-container rounded text-error transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span></button></div></td></tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Footer -->
+<div class="px-md py-4 flex items-center justify-between bg-surface-container-lowest border-t border-surface-variant">
+<p class="text-label-md font-label-md text-on-surface-variant">Showing 1 to 4 of 1,420 entries</p>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-on-primary font-bold text-label-sm">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors text-label-sm">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors text-label-sm">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Contextual FAB (Mobile Only Filter) -->
+<button class="md:hidden fixed bottom-20 right-6 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center z-50">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 bg-surface border-t border-surface-variant shadow-md z-50 pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Stock</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="add_box">add_box</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Add</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Alerts</span>
+</a>
+</nav>
+<!-- Visual Polish: Status Key Floating Hint -->
+<div class="hidden lg:block fixed bottom-8 right-8">
+<div class="bg-white p-4 border border-surface-variant rounded-xl shadow-sm space-y-2">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-1 border-b border-outline-variant pb-1">System Legend</p>
+<div class="flex items-center gap-2 text-xs">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="">In Stock (Healthy)</span>
+</div>
+<div class="flex items-center gap-2 text-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
+<span class="">Low Stock Threshold</span>
+</div>
+<div class="flex items-center gap-2 text-xs">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="">Expired (Discard)</span>
+</div>
+</div>
+</div>
+<script>
+        // Simple Interaction logic for interactive feel
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.style.transform = 'scale(0.95)';
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.style.transform = 'scale(1)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+
+        // Search highlight simulation
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+    </script>
+
+
+</body></html>

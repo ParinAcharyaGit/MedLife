@@ -1,0 +1,331 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Add Medicine | MedInventory Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-dim": "#d9dadb",
+                        "inverse-primary": "#acc7ff",
+                        "primary-container": "#0056b3",
+                        "background": "#f8f9fa",
+                        "primary": "#003f87",
+                        "on-tertiary-fixed-variant": "#92001f",
+                        "on-primary-fixed-variant": "#004491",
+                        "on-primary-container": "#bbd0ff",
+                        "tertiary": "#88001c",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002106",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-variant": "#e1e3e4",
+                        "primary-fixed-dim": "#acc7ff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#ffc0bf",
+                        "surface-container": "#edeeef",
+                        "surface-container-highest": "#e1e3e4",
+                        "secondary-fixed": "#83fc8e",
+                        "on-secondary-container": "#007327",
+                        "inverse-surface": "#2e3132",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#d7e2ff",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#001a40",
+                        "error-container": "#ffdad6",
+                        "outline": "#727784",
+                        "secondary-container": "#80f98b",
+                        "on-surface-variant": "#424752",
+                        "surface-bright": "#f8f9fa",
+                        "secondary": "#006e25",
+                        "on-secondary-fixed-variant": "#00531a",
+                        "on-background": "#191c1d",
+                        "tertiary-fixed-dim": "#ffb3b2",
+                        "outline-variant": "#c2c6d4",
+                        "tertiary-container": "#b10f2b",
+                        "surface": "#f8f9fa",
+                        "on-surface": "#191c1d",
+                        "on-tertiary-fixed": "#410008",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-fixed-dim": "#66df75",
+                        "surface-tint": "#115cb9",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#ffdad9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "0.25rem",
+                        "gutter": "1rem",
+                        "sm": "0.5rem",
+                        "base": "4px",
+                        "lg": "1.5rem",
+                        "margin-mobile": "1rem",
+                        "xl": "2.5rem",
+                        "margin-desktop": "2rem",
+                        "md": "1rem"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-md-mobile": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-md-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #003f87 !important;
+            box-shadow: 0 0 0 2px rgba(0, 63, 135, 0.1);
+        }
+    </style>
+</head>
+<body class="flex min-h-screen bg-background">
+<!-- SideNavBar (Desktop) -->
+<aside class="hidden md:flex flex-col h-screen w-64 bg-surface-container-lowest border-r border-surface-variant fixed left-0 top-0 py-lg px-md z-40">
+<div class="mb-xl px-sm">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">MedLife</h1>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">Unit 4-B North Wing</p>
+</div>
+<nav class="flex-1 space-y-1">
+
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                Inventory
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+                Add Medicine
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-all rounded-lg font-bold" href="#">
+<span class="material-symbols-outlined">warning</span>
+                Stock Alerts
+            </a>
+</nav>
+<div class="border-t border-surface-variant pt-lg mt-auto">
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-surface-variant sticky top-0 z-30 h-16 flex items-center">
+<div class="flex justify-between items-center w-full px-gutter max-w-[1440px] mx-auto">
+<div class="flex items-center gap-md">
+<span class="md:hidden material-symbols-outlined text-primary">menu</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">MedLife</span>
+</div>
+
+<div class="flex items-center gap-sm">
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="flex-1 p-gutter md:p-xl max-w-[1440px] mx-auto w-full pb-32 md:pb-xl">
+<div class="mb-lg flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-xs">Add New Medicine</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Register a new pharmaceutical entry into the central repository.</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-lg py-sm border border-primary text-primary font-label-md text-label-md rounded hover:bg-surface-container transition-colors">
+                        Cancel
+                    </button>
+<button class="px-lg py-sm bg-primary text-on-primary font-label-md text-label-md rounded hover:opacity-90 shadow-sm transition-all" form="medicine-form" type="submit">
+                        Save Entry
+                    </button>
+</div>
+</div>
+<form class="space-y-lg" id="medicine-form">
+<!-- Grid Container -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- Primary Information Card -->
+<div class="lg:col-span-8 space-y-lg">
+<div class="bg-surface-container-lowest border border-surface-variant rounded-lg p-lg">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-lg border-b border-surface-variant pb-md">Primary Details</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="col-span-full">
+<label class="block font-label-md text-label-md text-on-surface mb-base">Medicine Name <span class="text-error">*</span></label>
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="e.g. Amoxicillin 500mg Capsules" required="" type="text">
+</div>
+<div class="col-span-full">
+<label class="block font-label-md text-label-md text-on-surface mb-base">Company Sourced From <span class="text-error">*</span></label>
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="e.g. Pfizer Pharmaceuticals Inc." required="" type="text">
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-base">Batch Number <span class="text-error">*</span></label>
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="BN-99283-X" required="" type="text">
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-base">Serial Number</label>
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="SN-102-445-920" type="text">
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-surface-variant rounded-lg p-lg">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-lg border-b border-surface-variant pb-md">Logistics &amp; Storage</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-base">Quantity <span class="text-error">*</span></label>
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" min="0" placeholder="0" required="" type="number">
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-base">Price per Unit ($) <span class="text-error">*</span></label>
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="0.00" required="" step="0.01" type="number">
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-base">Shelf Location <span class="text-error">*</span></label>
+<select class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" required="">
+<option value="">Select Wing/Rack</option>
+<option value="a1">Wing A - Rack 1</option>
+<option value="a2">Wing A - Rack 2</option>
+<option value="b1">Wing B - Cold Storage</option>
+<option value="c1">Wing C - Controlled Substances</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<!-- Date & Status Card -->
+<div class="lg:col-span-4 space-y-lg">
+<div class="bg-surface-container-lowest border border-surface-variant rounded-lg p-lg">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-lg border-b border-surface-variant pb-md">Timeline</h3>
+<div class="space-y-lg">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-base">Date Brought In <span class="text-error">*</span></label>
+<div class="relative">
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" required="" type="date">
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-base">Expiry Date <span class="text-error">*</span></label>
+<div class="relative">
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" required="" type="date">
+<p class="mt-xs text-[10px] text-on-surface-variant italic">System will flag 30 days prior to this date.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Info Tip -->
+<div class="bg-primary/5 border border-primary/20 rounded-lg p-lg flex gap-md">
+<span class="material-symbols-outlined text-primary">info</span>
+<div class="space-y-sm">
+<h4 class="font-label-md text-label-md text-primary">Validation Rule</h4>
+<p class="font-body-md text-body-md text-on-surface-variant leading-tight">Ensure all expiry dates are at least 6 months from the date brought in for standard stock rotation compliance.</p>
+</div>
+</div>
+<!-- Image Placeholder for Context -->
+<div class="h-48 w-full rounded-lg overflow-hidden border border-surface-variant relative">
+<div class="bg-cover bg-center w-full h-full opacity-60" data-alt="A clean, professional medical laboratory or pharmacy shelf filled with organized, white medicine boxes. Soft blue and white lighting reflects off glass surfaces, creating a sterile and modern clinical atmosphere. The depth of field is shallow, focusing on a single box while others blur softly into the background, conveying high-end pharmaceutical organization." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBdTTkB5vaOrrql0jzzcJfuPOCvSZiMjTwk_7GOYZhD9DSiRyfwa33Ny7DqT_IhSaYbLifSRb4i1dlUt_IaEi7KP_Iv0xS6yLuxEhRAenghXUeBr5iOJ9Z_wifHn49F00cjenr1M_dul_WlZuNrJ8b3tc82JiiIrZaY_AWcXgjHQRx2wrxxsRoAupsNRViXNyaz70SQ0g_uPHtt3pBuCoP79TrfyXCg3vLtvMAiS4eixKHJsWzuJyoO2-j9APBOMBsXqK7FkQE441u0')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent flex items-end p-md">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Scanning visual confirmation...</span>
+</div>
+</div>
+</div>
+</div>
+</form>
+</div>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 bg-surface border-t border-surface-variant shadow-md pb-safe z-50">
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Stock</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_box</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Add</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">notifications_active</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Alerts</span>
+</a>
+</nav>
+</main>
+<script>
+        // Micro-interaction for form validation visual feedback
+        document.querySelectorAll('input, select').forEach(element => {
+            element.addEventListener('blur', function() {
+                if(this.required && !this.value) {
+                    this.classList.add('border-error');
+                    this.classList.remove('border-outline-variant');
+                } else {
+                    this.classList.remove('border-error');
+                    this.classList.add('border-outline-variant');
+                }
+            });
+        });
+
+        // Simple form submission feedback
+        document.getElementById('medicine-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.closest('main').querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">sync</span> Saving...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">check_circle</span> Saved';
+                btn.classList.replace('bg-primary', 'bg-secondary');
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.replace('bg-secondary', 'bg-primary');
+                    btn.disabled = false;
+                    alert('Medicine entry successfully added to inventory.');
+                }, 2000);
+            }, 1500);
+        });
+    </script>
+
+
+</body></html>
