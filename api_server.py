@@ -13,35 +13,21 @@ Then visit http://localhost:8000/docs for interactive API docs
 
 from contextlib import asynccontextmanager
 from datetime import date
+from pathlib import Path
 from typing import Optional, List, Dict, Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from core.inventory.drug_item import (
-    add_drug_item,
-    update_drug_item,
-    delete_drug_item,
-    get_drug_item,
-    list_drug_items,
-)
-from core.inventory.stock_tracking import (
-    update_stock,
-    record_stock_in,
-    record_stock_out,
-    get_stock_history,
-)
-from core.inventory.reminders import (
-    set_reminder,
-    get_upcoming_reminders,
-    auto_generate_expiry_reminders,
-)
-from core.database.connection import (
-    initialize_database,
-    close_database,
-)
+from core.inventory.drug_item import add_drug_item, update_drug_item, delete_drug_item, get_drug_item, list_drug_items
 
+from core.inventory.stock_tracking import update_stock, record_stock_in, record_stock_out, get_stock_history
+
+from core.inventory.reminders import set_reminder, get_upcoming_reminders, auto_generate_expiry_reminders
+
+from core.database.connection import initialize_database, close_database
 
 # --- Startup/shutdown wiring -------------------------------------------------
 # FastAPI's lifespan hook replaces manually calling initialize_database()/
@@ -145,11 +131,6 @@ def _reminder_to_dict(reminder) -> dict:
 
 
 # --- Routes --------------------------------------------------------------
-
-
-@app.get("/")
-async def root():
-    return {"status": "MedLife API is running"}
 
 
 # ==================== Drug Item Endpoints ====================
@@ -357,3 +338,13 @@ async def generate_expiry_reminders():
 async def health_check():
     """Health check endpoint."""
     return {"status": "healthy", "service": "MedLife API"}
+
+
+# --- Static Files (Frontend) --------------------------------------------------
+# Serve HTML, CSS, and JS from the frontend folder
+# This MUST be mounted last, after all API routes, so API routes take precedence
+FRONTEND_DIR = Path(__file__).resolve().parent / "frontend"
+if FRONTEND_DIR.exists():
+    app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
+else:
+    print(f"Warning: frontend directory not found at {FRONTEND_DIR}")

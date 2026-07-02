@@ -4,16 +4,10 @@ from typing import Optional, List, Dict, Any
 from abc import ABC, abstractmethod
 
 # import dataclasses from models/data_models.py
-from core.models.data_models import DrugItem
+from models.data_models import DrugItem
 
 # database imports
-from core.database.connection import get_connection, initialize_database, close_database, close_database, execute_write, fetch_one, fetch_all
-
-# db connection already initialized in main.py
-conn = get_connection()
-# Database connection safety fallback
-if conn is None:
-    raise RuntimeError("Database connection is not initialized. Please call initialize_database() first.")
+from core.database.connection import execute_write, fetch_one, fetch_all
 
 # CRUD operations ##########################################
 async def add_drug_item(item: DrugItem) -> bool:
@@ -21,20 +15,16 @@ async def add_drug_item(item: DrugItem) -> bool:
     # try catch except pattern to handle errors gracefully
     try:
         # update db using the drug item model
-        await execute_write(
-            conn,
+        return await execute_write(
             """
             INSERT INTO drug_items (id, name, date_of_purchase, date_of_manufacture, expiry_date, batch_number, serial_number, shelf_location, company_sourced_from, quantity, price)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (item.id, item.name, item.date_of_purchase, item.date_of_manufacture, item.expiry_date, item.batch_number, item.serial_number, item.shelf_location, item.company_sourced_from, item.quantity, item.price)
         )
-        return True
     except Exception as e:
         print(f"Error adding drug item: {e}")
         return False
-    finally:
-        await close_database()  # Close the database connection after operation
 
 async def update_drug_item(item_id: str, updates: Dict[str, Any]) -> bool:
     """Update an existing drug item."""
@@ -46,8 +36,7 @@ async def update_drug_item(item_id: str, updates: Dict[str, Any]) -> bool:
         set_clause = ", ".join(f"{key} = ?" for key in updates.keys())
         params = list(updates.values()) + [item_id]
 
-        await execute_write(
-            conn,
+        return await execute_write(
             f"""
             UPDATE drug_items
             SET {set_clause}
@@ -55,36 +44,28 @@ async def update_drug_item(item_id: str, updates: Dict[str, Any]) -> bool:
             """,
             tuple(params)
         )
-        return True
     except Exception as e:
         print(f"Error updating drug item: {e}")
         return False
-    finally:
-        await close_database()
 
 async def delete_drug_item(item_id: str) -> bool:
     """Delete a drug item from inventory."""
     try:
-        await execute_write(
-            conn,
+        return await execute_write(
             """
             DELETE FROM drug_items
             WHERE id = ?
             """,
             (item_id,)
         )
-        return True
     except Exception as e:
         print(f"Error deleting drug item: {e}")
         return False
-    finally:
-        await close_database()
 
 async def get_drug_item(item_id: str) -> Optional[DrugItem]:
     """Retrieve a drug item by ID."""   
     try:
         row = await fetch_one(
-            conn,
             """
             SELECT * FROM drug_items
             WHERE id = ?
@@ -97,8 +78,6 @@ async def get_drug_item(item_id: str) -> Optional[DrugItem]:
     except Exception as e:
         print(f"Error retrieving drug item: {e}")
         return None
-    finally:
-        await close_database()
 
 async def list_drug_items(
     expiry_date_before: Optional[date] = None,
@@ -123,10 +102,8 @@ async def list_drug_items(
             query += " AND shelf_location = ?"
             params.append(shelf_location)
 
-        rows = await fetch_all(conn, query, tuple(params)) # query is the SQL string with placeholders, params are the actual values
+        rows = await fetch_all(query, tuple(params)) # query is the SQL string with placeholders, params are the actual values
         return [DrugItem(**row) for row in rows]
     except Exception as e:  
         print(f"Error listing drug items: {e}")
-            return []
-    finally:
-        await close_database()
+        return []

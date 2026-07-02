@@ -1,47 +1,39 @@
 # import relevant data model
-from core.models.data_models import StockRecord
+from models.data_models import StockRecord
+from datetime import date
+from typing import Optional, List
 
 # database imports
-from core.database.connection import get_connection, execute_write, fetch_all
-conn = get_connection()
+from core.database.connection import execute_write, fetch_all
 
 # Stock operations
 async def update_stock(item_id: str, quantity_change: int) -> bool:
     """Update stock quantity for an item."""
     try:
-        await execute_write(
-            conn,
+        return await execute_write(
             """
             INSERT INTO stock_records (item_id, quantity_change, timestamp)
             VALUES (?, ?, ?)
             """,
             (item_id, quantity_change, date.today())
         )
-        return True
     except Exception as e:
         print(f"Error updating stock: {e}")
         return False
-    finally:
-        await close_database()
-    ...
 
 async def record_stock_in(item_id: str, quantity: int, received_date: date) -> bool:
     """Record stock received."""
     try:
-        await execute_write(
-            conn,
+        return await execute_write(
             """
             INSERT INTO stock_records (item_id, quantity_change, timestamp)
             VALUES (?, ?, ?)
             """,
             (item_id, quantity, received_date)
         )
-        return True
     except Exception as e:
         print(f"Error recording stock in: {e}")
         return False
-    finally:
-        await close_database()
 
 async def record_stock_out(item_id: str, quantity: int, used_date: date) -> bool:
     """Record stock used/dispensed."""

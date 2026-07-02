@@ -1,9 +1,10 @@
 # import relevant data model
-from core.models.data_models import Reminder
+from models.data_models import Reminder
+from datetime import date, timedelta
+from typing import List
 
 # database imports
-from core.database.connection import get_connection, execute_write, fetch_all
-conn = get_connection()
+from core.database.connection import execute_write, fetch_all
 
 # Reminder functions
 async def set_reminder(
@@ -13,8 +14,7 @@ async def set_reminder(
 ) -> bool:
     """Set a reminder for batch or expiry date."""
     try:
-        await execute_write(
-            conn,
+        return await execute_write(
             # the patterm below prevents SQL injection attacks
             """
             INSERT INTO reminders (item_id, reminder_date, type)
@@ -22,18 +22,14 @@ async def set_reminder(
             """,
             (item_id, reminder_date, reminder_type)
         )
-        return True
     except Exception as e:
         print(f"Error setting reminder: {e}")
         return False
-    finally:
-        await close_database()
 
 async def get_upcoming_reminders(days_ahead: int = 30) -> List[Reminder]:
     """Get reminders for the next N days."""
     try:
         rows = await fetch_all(
-            conn,
             """
             SELECT * FROM reminders
             WHERE reminder_date <= ?
@@ -51,8 +47,6 @@ async def get_upcoming_reminders(days_ahead: int = 30) -> List[Reminder]:
     except Exception as e:
         print(f"Error fetching upcoming reminders: {e}")
         return []
-    finally:
-        await close_database()
 
 async def auto_generate_expiry_reminders() -> int:
     """Automatically generate reminders for all items expiring within 30 days. Returns count of reminders created."""
@@ -62,7 +56,6 @@ async def auto_generate_expiry_reminders() -> int:
             conn,
             """
             SELECT * FROM drug_items
-            WHERE expiry_date <= ?
             """,
             (date.today() + timedelta(days=30),) # days are PASSED BY VALUE
         )
@@ -72,7 +65,6 @@ async def auto_generate_expiry_reminders() -> int:
             expiry_date = row['expiry_date']
             # Check if an expiry reminder already exists for this item and date
             existing_reminders = await fetch_all(
-                conn,
                 """
                 SELECT * FROM reminders
                 WHERE item_id = ? AND reminder_date = ? AND type = 'expiry'
@@ -88,5 +80,3 @@ async def auto_generate_expiry_reminders() -> int:
     except Exception as e:
         print(f"Error auto-generating expiry reminders: {e}")
         return 0
-    finally:
-        await close_database()
