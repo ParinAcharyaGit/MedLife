@@ -123,15 +123,15 @@
 </div>
 <nav class="flex-grow space-y-1">
 <!-- Dashboard hidden as requested -->
-<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container transition-all rounded-lg group" href="#">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container transition-all rounded-lg group" href="inventory.html">
 <span class="material-symbols-outlined">inventory_2</span>
 <span class="font-label-md text-label-md">Inventory</span>
 </a>
-<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container transition-all rounded-lg group" href="#">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container transition-all rounded-lg group" href="new_medicine.html">
 <span class="material-symbols-outlined">add_circle</span>
 <span class="font-label-md text-label-md">Add Medicine</span>
 </a>
-<a class="flex items-center gap-3 px-3 py-2 bg-primary-container text-on-primary-container font-bold rounded-lg group" href="#">
+<a class="flex items-center gap-3 px-3 py-2 bg-primary-container text-on-primary-container font-bold rounded-lg group" href="reminders.html">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
 <span class="font-label-md text-label-md">Stock Alerts</span>
 </a>
@@ -234,7 +234,7 @@
 <th class="px-6 py-4 text-right">Actions</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-outline-variant">
+<tbody id="reminders-body" class="divide-y divide-outline-variant">
 <!-- Row 1: Expired -->
 <tr class="hover:bg-surface-container-low transition-colors">
 <td class="px-6 py-5">
@@ -428,7 +428,120 @@
 </nav>
 </main>
 <script>
-        // Micro-interaction for table rows
+        // Reminders page functionality
+        document.addEventListener('DOMContentLoaded', async () => {
+            const tbody = document.getElementById('reminders-body');
+
+            // Fetch reminders from API
+            async function fetchReminders() {
+                try {
+                    const response = await fetch('/reminders');
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    const reminders = await response.json();
+                    return reminders;
+                } catch (err) {
+                    console.error('Failed to fetch reminders:', err);
+                    return [];
+                }
+            }
+
+            // Format date to MMM d, yyyy
+            function formatDate(dateStr) {
+                if (!dateStr) return '';
+                const d = new Date(dateStr);
+                return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            }
+
+            // Fetch drug items to get medicine names
+            async function fetchDrugItems() {
+                try {
+                    const response = await fetch('/drug-items');
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    const items = await response.json();
+                    return items;
+                } catch (err) {
+                    console.error('Failed to fetch drug items:', err);
+                    return [];
+                }
+            }
+
+            // Render a row for a reminder
+            function renderReminder(reminder, drugItems) {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-surface-container-low transition-colors';
+
+                // Find the drug item for this reminder
+                const drugItem = drugItems.find(item => item.id === reminder.item_id);
+                const medicineName = drugItem ? drugItem.name : 'Unknown';
+                const batchNumber = drugItem ? drugItem.batch_number : 'N/A';
+
+                // Determine status based on reminder_date
+                const reminderDate = new Date(reminder.reminder_date);
+                const today = new Date();
+                const isExpired = reminderDate < today;
+                const daysUntilExpiry = Math.ceil((reminderDate - today) / (1000 * 60 * 60 * 24));
+                const status = isExpired ? 'Expired' : `Expiring in ${daysUntilExpiry} days`;
+
+                // Medicine Name
+                const nameTd = document.createElement('td');
+                nameTd.className = 'px-6 py-5';
+                const iconClass = isExpired ? 'error' : 'secondary';
+                nameTd.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-${iconClass}-container flex items-center justify-center">
+                            <span class="material-symbols-outlined text-${iconClass} text-lg">schedule</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-on-surface">${medicineName}</p>
+                            <p class="text-xs text-on-surface-variant">${reminder.type || 'reminder'} • ${reminder.message || ''}</p>
+                        </div>
+                    </div>
+                `;
+                tr.appendChild(nameTd);
+
+                // Batch Number
+                const batchTd = document.createElement('td');
+                batchTd.className = 'px-6 py-5';
+                batchTd.textContent = batchNumber;
+                tr.appendChild(batchTd);
+
+                // Status
+                const statusTd = document.createElement('td');
+                statusTd.className = 'px-6 py-5';
+                const statusClass = isExpired ? 'error' : 'secondary';
+                statusTd.innerHTML = `<span class="px-3 py-1 bg-${statusClass}-container text-on-${statusClass} text-xs font-bold rounded-full border border-${statusClass}/10 uppercase tracking-wider">${status}</span>`;
+                tr.appendChild(statusTd);
+
+                // Expiry Date
+                const dateTd = document.createElement('td');
+                dateTd.className = 'px-6 py-5';
+                const bgColor = isExpired ? 'error' : 'surface';
+                dateTd.innerHTML = `
+                    <div class="flex flex-col">
+                        <span class="text-on-${bgColor} font-semibold bg-${bgColor} px-2 py-0.5 rounded text-xs w-fit">${formatDate(reminder.reminder_date)}</span>
+                        <span class="text-[10px] text-${bgColor}-variant mt-1">${isExpired ? 'Disposal Required' : 'Take Action'}</span>
+                    </div>
+                `;
+                tr.appendChild(dateTd);
+
+                // Actions
+                const actionsTd = document.createElement('td');
+                actionsTd.className = 'px-6 py-5 text-right';
+                actionsTd.innerHTML = `<button class="text-primary hover:underline font-label-md">View Details</button>`;
+                tr.appendChild(actionsTd);
+
+                tbody.appendChild(tr);
+            }
+
+            // Initial load
+            const reminders = await fetchReminders();
+            const drugItems = await fetchDrugItems();
+            // Clear existing rows
+            tbody.innerHTML = '';
+            reminders.forEach(reminder => renderReminder(reminder, drugItems));
+        });
+
+        // Keep existing micro-interactions for table rows (click effect)
         document.querySelectorAll('tr').forEach(row => {
             row.addEventListener('click', () => {
                 row.classList.add('scale-[0.995]', 'opacity-80');
@@ -440,11 +553,13 @@
 
         // Search bar focus effect
         const searchInput = document.querySelector('input[type="text"]');
-        searchInput.addEventListener('focus', () => {
-            searchInput.parentElement.classList.add('ring-2', 'ring-primary');
-        });
-        searchInput.addEventListener('blur', () => {
-            searchInput.parentElement.classList.remove('ring-2', 'ring-primary');
-        });
+        if (searchInput) {
+            searchInput.addEventListener('focus', () => {
+                searchInput.parentElement.classList.add('ring-2', 'ring-primary');
+            });
+            searchInput.addEventListener('blur', () => {
+                searchInput.parentElement.classList.remove('ring-2', 'ring-primary');
+            });
+        }
     </script>
 </body></html>

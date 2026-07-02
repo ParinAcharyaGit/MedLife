@@ -21,7 +21,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from core.inventory.drug_item import add_drug_item, update_drug_item, delete_drug_item, get_drug_item, list_drug_items
+from models.data_models import DrugItem
+from core.inventory.drug_item import (
+    add_drug_item as add_drug_item_func,
+    update_drug_item as update_drug_item_func,
+    delete_drug_item as delete_drug_item_func,
+    get_drug_item,
+    list_drug_items as fetch_drug_items,
+)
 
 from core.inventory.stock_tracking import update_stock, record_stock_in, record_stock_out, get_stock_history
 
@@ -137,7 +144,7 @@ def _reminder_to_dict(reminder) -> dict:
 
 
 @app.get("/drug-items")
-async def list_drug_items(
+async def get_all_drug_items(
     expiry_before: Optional[date] = None,
     low_stock_threshold: Optional[int] = None,
     shelf_location: Optional[str] = None,
@@ -145,7 +152,7 @@ async def list_drug_items(
     """List drug items, with optional filters as query params, e.g.
     GET /drug-items?low_stock_threshold=10
     """
-    items = await list_drug_items(
+    items = await fetch_drug_items(
         expiry_date_before=expiry_before,
         low_stock_threshold=low_stock_threshold,
         shelf_location=shelf_location,
@@ -177,7 +184,7 @@ async def create_drug_item(item: DrugItemIn):
         quantity=item.quantity,
         price=item.price,
     )
-    success = await add_drug_item(drug_item)
+    success = await add_drug_item_func(drug_item)
     if not success:
         raise HTTPException(status_code=500, detail="Failed to create drug item")
 
@@ -190,14 +197,14 @@ async def create_drug_item(item: DrugItemIn):
 
 
 @app.patch("/drug-items/{item_id}")
-async def update_drug_item(item_id: str, updates: DrugItemUpdate):
+patch("/drug-items/{item_id}")
+async def patch_drug_item(item_id: str, updates: DrugItemUpdate):
     # Convert Pydantic model to dict, excluding unset fields
     update_data = updates.model_dump(exclude_unset=True)
     if not update_data:
         raise HTTPException(status_code=400, detail="No fields provided to update")
 
-    success = await update_drug_item(item_id, update_data)
-    if not success:
+    success = await update_drug_item_func
         raise HTTPException(status_code=500, detail="Failed to update drug item")
 
     # Fetch the updated item to return
@@ -210,7 +217,7 @@ async def update_drug_item(item_id: str, updates: DrugItemUpdate):
 
 @app.delete("/drug-items/{item_id}", status_code=204)
 async def delete_drug_item(item_id: str):
-    success = await delete_drug_item(item_id)
+    success = await delete_drug_item_func(item_id)
     if not success:
         raise HTTPException(status_code=500, detail="Failed to delete drug item")
     return None
@@ -317,10 +324,11 @@ async def create_reminder(reminder: ReminderIn):
     return {"status": "Reminder created successfully"}
 
 
-@app.get("/reminders", response_model=List[ReminderOut])
+@app.get("/reminders")
 async def get_reminders(days_ahead: int = 30):
     """Get upcoming reminders for the next N days."""
     reminders = await get_upcoming_reminders(days_ahead=days_ahead)
+    # Convert reminder objects to dicts
     return [_reminder_to_dict(reminder) for reminder in reminders]
 
 
@@ -334,7 +342,7 @@ async def generate_expiry_reminders():
 # ==================== Health Check Endpoint ====================
 
 
-@app.get("/health")
+@app.get("/")
 async def health_check():
     """Health check endpoint."""
     return {"status": "healthy", "service": "MedLife API"}

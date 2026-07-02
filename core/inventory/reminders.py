@@ -80,3 +80,41 @@ async def auto_generate_expiry_reminders() -> int:
     except Exception as e:
         print(f"Error auto-generating expiry reminders: {e}")
         return 0
+
+
+async def get_enriched_upcoming_reminders(days_ahead: int = 30) -> List[dict]:
+    """Get upcoming reminders joined with drug item info for frontend display."""
+    try:
+        rows = await fetch_all(
+            """
+            SELECT
+                r.id,
+                r.item_id,
+                d.name as medicine_name,
+                '' as details,
+                d.batch_number as batch_number,
+                r.reminder_date as expiry_date,
+                r.type as reminder_type
+            FROM reminders r
+            JOIN drug_items d ON r.item_id = d.id
+            WHERE r.reminder_date <= ?
+            """,
+            (date.today() + timedelta(days=days_ahead),)
+        )
+        result = []
+        for r in rows:
+            # Determine status based on reminder type
+            status = r['reminder_type'].capitalize() if r['reminder_type'] else ''
+            result.append({
+                'id': r['id'],
+                'item_id': r['item_id'],
+                'medicine_name': r['medicine_name'] or '',
+                'details': r['details'] or '',
+                'batch_number': r['batch_number'] or '',
+                'status': status,
+                'expiry_date': r['expiry_date']  # YYYY-MM-DD string
+            })
+        return result
+    except Exception as e:
+        print(f"Error fetching enriched upcoming reminders: {e}")
+        return []

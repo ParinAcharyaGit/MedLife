@@ -124,15 +124,15 @@
 <p class="text-on-surface-variant font-label-md text-label-md">Unit 4-B North Wing</p>
 </div>
 <nav class="flex-1 space-y-2">
-<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-lg font-label-md text-label-md" href="#">
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-lg font-label-md text-label-md" href="inventory.html">
 <span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
                 Inventory
             </a>
-<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-label-md text-label-md hover:bg-surface-container transition-all" href="#">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-label-md text-label-md hover:bg-surface-container transition-all" href="new_medicine.html">
 <span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
                 Add Medicine
             </a>
-<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-label-md text-label-md hover:bg-surface-container transition-all" href="#">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-label-md text-label-md hover:bg-surface-container transition-all" href="reminders.html">
 <span class="material-symbols-outlined" data-icon="warning">warning</span>
                 Stock Alerts
             </a>
@@ -180,10 +180,10 @@
 <span class="material-symbols-outlined text-[18px]" data-icon="file_download">file_download</span>
                         Export CSV
                     </button>
-<button class="px-lg py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg flex items-center gap-2 hover:opacity-90 transition-all shadow-sm" style="transform: scale(1);">
+<a href="new_medicine.html" class="px-lg py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg flex items-center gap-2 hover:opacity-90 transition-all shadow-sm" style="transform: scale(1); text-decoration: none;">
 <span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
                         New Entry
-                    </button>
+                    </a>
 </div>
 </div>
 <!-- Stats Bar (Visual Thermometers/Alerts) -->
@@ -223,15 +223,19 @@
 <thead>
 <tr class="bg-surface-container-low border-b border-surface-variant"><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase">Medicine Details</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase">Serial / Batch</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase">In-Stock Date</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase">Expiry Date</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase text-right">Quantity</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase">Location</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase">Sourced From</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase text-right">Price</th><th class="px-md py-4 font-label-md text-label-md text-on-surface-variant uppercase text-center">Actions</th></tr>
 </thead>
-<tbody class="font-body-md text-body-md">
-<!-- Row 1: Low Stock Alert -->
-<tr class="zebra-row hover:bg-surface-container-highest transition-colors border-b border-surface-variant"><td class="px-md py-4"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]" data-icon="pill">pill</span></div><div><p class="font-semibold text-on-surface">Amoxicillin 500mg</p></div></div></td><td class="px-md py-4"><p class="text-xs font-mono text-outline">SN: 44921-00</p><p class="text-xs font-mono text-outline">Batch: #AX-2024</p></td><td class="px-md py-4 text-on-surface-variant">Oct 12, 2023</td><td class="px-md py-4 font-medium text-on-surface">Mar 15, 2025</td><td class="px-md py-4 text-right"><div class="flex flex-col items-end"><span class="text-tertiary font-bold">12 units</span><div class="w-16 h-1 bg-surface-variant rounded-full mt-1 overflow-hidden"><div class="h-full bg-tertiary-container" style="width: 25%"></div></div><span class="text-[10px] text-tertiary uppercase mt-1">Low Stock</span></div></td><td class="px-md py-4"><span class="px-2 py-1 bg-surface-container-high rounded text-xs">Shelf B-12</span></td><td class="px-md py-4 text-on-surface-variant">Global Pharma Co.</td><td class="px-md py-4 text-right font-medium">$12.50 / unit</td><td class="px-md py-4 text-center"><div class="flex justify-center gap-2"><button class="p-1.5 hover:bg-primary-fixed rounded text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span></button><button class="p-1.5 hover:bg-error-container rounded text-error transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span></button></div></td></tr>
-<!-- Row 2: Expired Alert -->
-<tr class="zebra-row hover:bg-surface-container-highest transition-colors border-b border-surface-variant"><td class="px-md py-4"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]" data-icon="medication">medication</span></div><div><p class="font-semibold text-on-surface">Insulin Glargine</p></div></div></td><td class="px-md py-4"><p class="text-xs font-mono text-outline">SN: 88122-45</p><p class="text-xs font-mono text-outline">Batch: #IN-9912</p></td><td class="px-md py-4 text-on-surface-variant">Nov 02, 2023</td><td class="px-md py-4"><div class="flex items-center gap-1.5 text-error"><span class="material-symbols-outlined text-[16px]" data-icon="error">error</span><span class="font-bold">Jan 01, 2024</span></div></td><td class="px-md py-4 text-right"><div class="flex flex-col items-end"><span class="text-on-surface">5 units</span><div class="w-16 h-1 bg-surface-variant rounded-full mt-1 overflow-hidden"><div class="h-full bg-error" style="width: 10%"></div></div><span class="text-[10px] text-error uppercase mt-1">Expired</span></div></td><td class="px-md py-4"><span class="px-2 py-1 bg-surface-container-high rounded text-xs">Cold-Storage C</span></td><td class="px-md py-4 text-on-surface-variant">Novo Dist.</td><td class="px-md py-4 text-right font-medium">$85.00 / unit</td><td class="px-md py-4 text-center"><div class="flex justify-center gap-2"><button class="p-1.5 hover:bg-primary-fixed rounded text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span></button><button class="p-1.5 hover:bg-error-container rounded text-error transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span></button></div></td></tr>
-<!-- Row 3: Healthy Stock -->
-<tr class="zebra-row hover:bg-surface-container-highest transition-colors border-b border-surface-variant"><td class="px-md py-4"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]" data-icon="vaccines">vaccines</span></div><div><p class="font-semibold text-on-surface">Lisinopril 10mg</p></div></div></td><td class="px-md py-4"><p class="text-xs font-mono text-outline">SN: 12102-09</p><p class="text-xs font-mono text-outline">Batch: #LP-5562</p></td><td class="px-md py-4 text-on-surface-variant">Jan 15, 2024</td><td class="px-md py-4 font-medium text-on-surface">Dec 12, 2026</td><td class="px-md py-4 text-right"><div class="flex flex-col items-end"><span class="text-on-surface">250 units</span><div class="w-16 h-1 bg-surface-variant rounded-full mt-1 overflow-hidden"><div class="h-full bg-secondary" style="width: 85%"></div></div><span class="text-[10px] text-secondary uppercase mt-1">Optimal</span></div></td><td class="px-md py-4"><span class="px-2 py-1 bg-surface-container-high rounded text-xs">Shelf A-04</span></td><td class="px-md py-4 text-on-surface-variant">MediDirect</td><td class="px-md py-4 text-right font-medium">$4.20 / unit</td><td class="px-md py-4 text-center"><div class="flex justify-center gap-2"><button class="p-1.5 hover:bg-primary-fixed rounded text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span></button><button class="p-1.5 hover:bg-error-container rounded text-error transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span></button></div></td></tr>
-<!-- Row 4: Pricing focus -->
-<tr class="zebra-row hover:bg-surface-container-highest transition-colors border-b border-surface-variant"><td class="px-md py-4"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]" data-icon="emergency_home">emergency_home</span></div><div><p class="font-semibold text-on-surface">Epinephrine Pen</p></div></div></td><td class="px-md py-4"><p class="text-xs font-mono text-outline">SN: 77201-11</p><p class="text-xs font-mono text-outline">Batch: #EP-2024</p></td><td class="px-md py-4 text-on-surface-variant">Feb 22, 2024</td><td class="px-md py-4 font-medium text-on-surface">Oct 30, 2025</td><td class="px-md py-4 text-right"><div class="flex flex-col items-end"><span class="text-on-surface font-bold">45 units</span><div class="w-16 h-1 bg-surface-variant rounded-full mt-1 overflow-hidden"><div class="h-full bg-secondary" style="width: 60%"></div></div><span class="text-[10px] text-secondary uppercase mt-1">Optimal</span></div></td><td class="px-md py-4"><span class="px-2 py-1 bg-surface-container-high rounded text-xs">Emergency Box 1</span></td><td class="px-md py-4 text-on-surface-variant">CareSupply Inc.</td><td class="px-md py-4 text-right font-medium">$112.50 / unit</td><td class="px-md py-4 text-center"><div class="flex justify-center gap-2"><button class="p-1.5 hover:bg-primary-fixed rounded text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span></button><button class="p-1.5 hover:bg-error-container rounded text-error transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span></button></div></td></tr>
+<tbody id="inventory-body" class="font-body-md text-body-md">
+  <!-- Template row hidden -->
+  <tr id="inventory-template" class="hidden">
+    <td class="px-md py-4"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]" data-icon="pill">pill</span></div><div><p class="font-semibold text-on-surface">[name]</p></div></div></td>
+    <td class="px-md py-4"><p class="text-xs font-mono text-outline">SN: [serial_number]</p><p class="text-xs font-mono text-outline">Batch: [batch_number]</p></td>
+    <td class="px-md py-4 text-on-surface-variant">[date_of_purchase_formatted]</td>
+    <td class="px-md py-4 font-medium text-on-surface">[expiry_date_formatted]</td>
+    <td class="px-md py-4 text-right"><div class="flex flex-col items-end"><span class="text-tertiary font-bold">[quantity] units</span><div class="w-16 h-1 bg-surface-variant rounded-full mt-1 overflow-hidden"><div class="h-full bg-tertiary-container" style="width: [stock_percentage]%"></div></div><span class="text-[10px] text-tertiary uppercase mt-1">[stock_status]</span></div></td>
+    <td class="px-md py-4"><span class="px-2 py-1 bg-surface-container-high rounded text-xs">[shelf_location]</span></td>
+    <td class="px-md py-4 text-on-surface-variant">[company_sourced_from]</td>
+    <td class="px-md py-4 text-right font-medium">$[price] / unit</td>
+    <td class="px-md py-4 text-center"><div class="flex justify-center gap-2"><button class="p-1.5 hover:bg-primary-fixed rounded text-primary transition-colors edit-btn" data-id="[id]"><span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span></button><button class="p-1.5 hover:bg-error-container rounded text-error transition-colors delete-btn" data-id="[id]"><span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span></button></div></td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -295,7 +299,114 @@
 </div>
 </div>
 <script>
-        // Simple Interaction logic for interactive feel
+        // Inventory page functionality
+        document.addEventListener('DOMContentLoaded', async () => {
+            const tbody = document.getElementById('inventory-body');
+            const template = document.getElementById('inventory-template');
+
+            // Fetch inventory from API
+            async function fetchInventory() {
+                try {
+                    const response = await fetch('/drug-items');
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    const items = await response.json();
+                    return items;
+                } catch (err) {
+                    console.error('Failed to fetch inventory:', err);
+                    return [];
+                }
+            }
+
+            // Format date to MMM d, yyyy
+            function formatDate(dateStr) {
+                if (!dateStr) return '';
+                const d = new Date(dateStr);
+                return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            }
+
+            // Determine stock status and percentage
+            function getStockInfo(quantity) {
+                if (quantity < 10) {
+                    return { status: 'Low Stock', percent: Math.min(quantity * 10, 100) };
+                } else if (quantity < 50) {
+                    return { status: 'Moderate', percent: Math.min(quantity * 2, 100) };
+                } else {
+                    return { status: 'Optimal', percent: Math.min(quantity * 1, 100) };
+                }
+            }
+
+            // Render a row for an item
+            function renderItem(item) {
+                let html = template.innerHTML;
+                html = html.replace(/\[name\]/g, item.name || '');
+                html = html.replace(/\[serial_number\]/g, item.serial_number || '');
+                html = html.replace(/\[batch_number\]/g, item.batch_number || '');
+                html = html.replace(/\[date_of_purchase_formatted\]/g, formatDate(item.date_of_purchase));
+                html = html.replace(/\[expiry_date_formatted\]/g, formatDate(item.expiry_date));
+                const quantity = item.quantity || 0;
+                html = html.replace(/\[quantity\]/g, quantity);
+                const stockInfo = getStockInfo(quantity);
+                html = html.replace(/\[stock_percentage\]/g, stockInfo.percent);
+                html = html.replace(/\[stock_status\]/g, stockInfo.status);
+                html = html.replace(/\[shelf_location\]/g, item.shelf_location || '');
+                html = html.replace(/\[company_sourced_from\]/g, item.company_sourced_from || '');
+                html = html.replace(/\[price\]/g, (item.price || 0).toFixed(2));
+                html = html.replace(/\[id\]/g, item.id || '');
+                const div = document.createElement('div');
+                div.innerHTML = html;
+                const tr = div.firstChild;
+                tbody.appendChild(tr);
+            }
+
+            // Handle edit/delete clicks via event delegation
+            tbody.addEventListener('click', async (e) => {
+                const editBtn = e.target.closest('.edit-btn');
+                if (editBtn) {
+                    const id = editBtn.dataset.id;
+                    window.location.href = `new_medicine.html?id=${id}`;
+                    return;
+                }
+                const delBtn = e.target.closest('.delete-btn');
+                if (delBtn) {
+                    if (!confirm('Delete this item?')) return;
+                    const id = delBtn.dataset.id;
+                    try {
+                        const resp = await fetch(`/drug-items/${id}`, { method: 'DELETE' });
+                        if (!resp.ok) throw new Error('Failed to delete');
+                        // Remove row from DOM
+                        delBtn.closest('tr').remove();
+                        alert('Item deleted');
+                    } catch (err) {
+                        alert('Error deleting item');
+                    }
+                }
+            });
+
+            // Initial load
+            const items = await fetchInventory();
+            // Clear existing rows except the template
+            Array.from(tbody.children).forEach(child => {
+                if (child.id !== 'inventory-template') {
+                    child.remove();
+                }
+            });
+            items.forEach(renderItem);
+        });
+
+        // Keep existing search functionality (filters rows by text)
+        const searchInput = document.querySelector('input[type="text"]');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const rows = document.querySelectorAll('tbody tr:not(#inventory-template)');
+                rows.forEach(row => {
+                    const text = row.innerText.toLowerCase();
+                    row.style.display = text.includes(query) ? '' : 'none';
+                });
+            });
+        }
+
+        // Button interaction effects (keep existing)
         document.querySelectorAll('button').forEach(btn => {
             btn.addEventListener('mousedown', () => {
                 btn.style.transform = 'scale(0.95)';
@@ -305,17 +416,6 @@
             });
             btn.addEventListener('mouseleave', () => {
                 btn.style.transform = 'scale(1)';
-            });
-        });
-
-        // Search highlight simulation
-        const searchInput = document.querySelector('input[type="text"]');
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            const rows = document.querySelectorAll('tbody tr');
-            rows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                row.style.display = text.includes(query) ? '' : 'none';
             });
         });
     </script>

@@ -123,15 +123,15 @@
 </div>
 <nav class="flex-1 space-y-1">
 
-<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-all rounded-lg" href="#">
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-all rounded-lg" href="inventory.html">
 <span class="material-symbols-outlined">inventory_2</span>
                 Inventory
             </a>
-<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-lg transition-all" href="#">
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-lg transition-all" href="new_medicine.html">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
                 Add Medicine
             </a>
-<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-all rounded-lg font-bold" href="#">
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-all rounded-lg font-bold" href="reminders.html">
 <span class="material-symbols-outlined">warning</span>
                 Stock Alerts
             </a>
@@ -175,9 +175,9 @@
 <p class="font-body-md text-body-md text-on-surface-variant">Register a new pharmaceutical entry into the central repository.</p>
 </div>
 <div class="flex gap-sm">
-<button class="px-lg py-sm border border-primary text-primary font-label-md text-label-md rounded hover:bg-surface-container transition-colors">
+<a href="inventory.html" class="px-lg py-sm border border-primary text-primary font-label-md text-label-md rounded hover:bg-surface-container transition-colors" style="text-decoration: none; display: inline-block;">
                         Cancel
-                    </button>
+                    </a>
 <button class="px-lg py-sm bg-primary text-on-primary font-label-md text-label-md rounded hover:opacity-90 shadow-sm transition-all" form="medicine-form" type="submit">
                         Save Entry
                     </button>
@@ -193,19 +193,19 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
 <div class="col-span-full">
 <label class="block font-label-md text-label-md text-on-surface mb-base">Medicine Name <span class="text-error">*</span></label>
-<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="e.g. Amoxicillin 500mg Capsules" required="" type="text">
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="e.g. Amoxicillin 500mg Capsules" required="" type="text" name="medicine-name">
 </div>
 <div class="col-span-full">
 <label class="block font-label-md text-label-md text-on-surface mb-base">Company Sourced From <span class="text-error">*</span></label>
-<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="e.g. Pfizer Pharmaceuticals Inc." required="" type="text">
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="e.g. Pfizer Pharmaceuticals Inc." required="" type="text" name="company-sourced-from">
 </div>
 <div>
 <label class="block font-label-md text-label-md text-on-surface mb-base">Batch Number <span class="text-error">*</span></label>
-<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="BN-99283-X" required="" type="text">
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="BN-99283-X" required="" type="text" name="batch-number">
 </div>
 <div>
 <label class="block font-label-md text-label-md text-on-surface mb-base">Serial Number</label>
-<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="SN-102-445-920" type="text">
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="SN-102-445-920" type="text" name="serial-number">
 </div>
 </div>
 </div>
@@ -214,15 +214,15 @@
 <div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
 <div>
 <label class="block font-label-md text-label-md text-on-surface mb-base">Quantity <span class="text-error">*</span></label>
-<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" min="0" placeholder="0" required="" type="number">
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" min="0" placeholder="0" required="" type="number" name="quantity">
 </div>
 <div>
 <label class="block font-label-md text-label-md text-on-surface mb-base">Price per Unit ($) <span class="text-error">*</span></label>
-<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="0.00" required="" step="0.01" type="number">
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" placeholder="0.00" required="" step="0.01" type="number" name="price">
 </div>
 <div>
 <label class="block font-label-md text-label-md text-on-surface mb-base">Shelf Location <span class="text-error">*</span></label>
-<select class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" required="">
+<select class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" required="" name="shelf-location">
 <option value="">Select Wing/Rack</option>
 <option value="a1">Wing A - Rack 1</option>
 <option value="a2">Wing A - Rack 2</option>
@@ -239,15 +239,15 @@
 <h3 class="font-headline-sm text-headline-sm text-primary mb-lg border-b border-surface-variant pb-md">Timeline</h3>
 <div class="space-y-lg">
 <div>
-<label class="block font-label-md text-label-md text-on-surface mb-base">Date Brought In <span class="text-error">*</span></label>
+<label class="block font-label-md text-label-md text-on-surface mb-base">Date of Purchase <span class="text-error">*</span></label>
 <div class="relative">
-<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" required="" type="date">
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" required="" type="date" name="date-of-purchase">
 </div>
 </div>
 <div>
 <label class="block font-label-md text-label-md text-on-surface mb-base">Expiry Date <span class="text-error">*</span></label>
 <div class="relative">
-<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" required="" type="date">
+<input class="w-full border border-outline-variant rounded p-sm font-body-md text-body-md bg-transparent" required="" type="date" name="expiry-date">
 <p class="mt-xs text-[10px] text-on-surface-variant italic">System will flag 30 days prior to this date.</p>
 </div>
 </div>
@@ -296,7 +296,7 @@
         // Micro-interaction for form validation visual feedback
         document.querySelectorAll('input, select').forEach(element => {
             element.addEventListener('blur', function() {
-                if(this.required && !this.value) {
+                if (this.required && !this.value) {
                     this.classList.add('border-error');
                     this.classList.remove('border-outline-variant');
                 } else {
@@ -306,24 +306,68 @@
             });
         });
 
-        // Simple form submission feedback
-        document.getElementById('medicine-form').addEventListener('submit', (e) => {
+        // Form submission
+        document.getElementById('medicine-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = e.target.closest('main').querySelector('button[type="submit"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">sync</span> Saving...';
-            btn.disabled = true;
-            
-            setTimeout(() => {
-                btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">check_circle</span> Saved';
-                btn.classList.replace('bg-primary', 'bg-secondary');
+            // The submit button is outside the form, so find it using document
+            const submitBtn = document.querySelector('button[form="medicine-form"]') || e.target.querySelector('button[type="submit"]');
+            if (!submitBtn) {
+                alert('Error: Submit button not found');
+                return;
+            }
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">sync</span> Saving...';
+            submitBtn.disabled = true;
+
+            try {
+                const form = e.target;
+                // Collect form data
+                const data = {
+                    id: crypto.randomUUID(),
+                    name: form.elements['medicine-name'].value.trim(),
+                    company_sourced_from: form.elements['company-sourced-from'].value.trim(),
+                    batch_number: form.elements['batch-number'].value.trim(),
+                    serial_number: form.elements['serial-number'].value.trim(),
+                    quantity: parseInt(form.elements['quantity'].value) || 0,
+                    price: parseFloat(form.elements['price'].value) || 0.0,
+                    shelf_location: form.elements['shelf-location'].value,
+                    date_of_purchase: form.elements['date-of-purchase'].value,
+                    date_of_manufacture: form.elements['date-of-purchase'].value,
+                    expiry_date: form.elements['expiry-date'].value
+                };
+
+                // Basic validation
+                if (!data.name || !data.company_sourced_from || !data.batch_number || !data.shelf_location ||
+                    !data.date_of_purchase || !data.date_of_manufacture || !data.expiry_date) {
+                    throw new Error('Please fill all required fields');
+                }
+
+                const response = await fetch('/drug-items', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to create medicine');
+                }
+
+                const result = await response.json();
+                // Show success and redirect to inventory after a short delay
+                submitBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">check_circle</span> Saved';
                 setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.classList.replace('bg-secondary', 'bg-primary');
-                    btn.disabled = false;
-                    alert('Medicine entry successfully added to inventory.');
-                }, 2000);
-            }, 1500);
+                    window.location.href = 'inventory.html';
+                }, 1500);
+            } catch (err) {
+                console.error('Error:', err);
+                alert('Error: ' + err.message);
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
         });
     </script>
 
