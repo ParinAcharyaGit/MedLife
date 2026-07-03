@@ -539,6 +539,9 @@
             // Clear existing rows
             tbody.innerHTML = '';
             reminders.forEach(reminder => renderReminder(reminder, drugItems));
+
+            // Update stats based on actual data
+            updateStats(reminders);
         });
 
         // Keep existing micro-interactions for table rows (click effect)
@@ -560,6 +563,38 @@
             searchInput.addEventListener('blur', () => {
                 searchInput.parentElement.classList.remove('ring-2', 'ring-primary');
             });
+        }
+
+        // Update stats based on reminders data
+        function updateStats(reminders) {
+            // Calculate expired reminders (those with status containing "Expired")
+            const expiredCount = reminders.filter(r =>
+                r.status && r.status.toLowerCase().includes('expired')
+            ).length;
+
+            // Calculate expiring soon (those with status containing "Expiring in")
+            const expiringSoonCount = reminders.filter(r =>
+                r.status && r.status.toLowerCase().includes('expiring in')
+            ).length;
+
+            // Total alerts is just the length of reminders array
+            const totalAlerts = reminders.length;
+
+            // Update the DOM elements
+            const expiredElement = document.querySelector('.bg-error-container .text-3xl.font-bold.text-on-error-container');
+            if (expiredElement) {
+                expiredElement.textContent = expiredCount;
+            }
+
+            const expiringSoonElement = document.querySelector('.bg-secondary-container .text-3xl.font-bold.text-on-secondary-container');
+            if (expiringSoonElement) {
+                expiringSoonElement.textContent = expiringSoonCount;
+            }
+
+            const totalAlertsElement = document.querySelector('.bg-surface-container-high .text-3xl.font-bold.text-on-surface');
+            if (totalAlertsElement) {
+                totalAlertsElement.textContent = totalAlerts;
+            }
         }
     </script>
 </body></html>

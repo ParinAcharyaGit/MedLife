@@ -161,7 +161,7 @@ async def get_all_drug_items(
 
 
 @app.get("/drug-items/{item_id}")
-async def get_drug_item(item_id: str):
+async def get_drug_item_endpoint(item_id: str):
     item = await get_drug_item(item_id)
     if item is None:
         raise HTTPException(status_code=404, detail=f"Drug item '{item_id}' not found")
@@ -197,14 +197,14 @@ async def create_drug_item(item: DrugItemIn):
 
 
 @app.patch("/drug-items/{item_id}")
-patch("/drug-items/{item_id}")
 async def patch_drug_item(item_id: str, updates: DrugItemUpdate):
     # Convert Pydantic model to dict, excluding unset fields
     update_data = updates.model_dump(exclude_unset=True)
     if not update_data:
         raise HTTPException(status_code=400, detail="No fields provided to update")
 
-    success = await update_drug_item_func
+    success = await update_drug_item_func(item_id, update_data)
+    if not success:
         raise HTTPException(status_code=500, detail="Failed to update drug item")
 
     # Fetch the updated item to return
@@ -313,14 +313,13 @@ async def create_reminder(reminder: ReminderIn):
     success = await set_reminder(
         item_id=reminder.item_id,
         reminder_date=reminder.reminder_date,
-        reminder_type=reminder.type
+        reminder_type=reminder.type,
+        message=reminder.message,
     )
 
     if not success:
         raise HTTPException(status_code=500, detail="Failed to create reminder")
 
-    # In a full implementation, we would fetch the created reminder to return it
-    # For now, we return a success message
     return {"status": "Reminder created successfully"}
 
 

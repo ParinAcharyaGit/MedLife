@@ -1,4 +1,5 @@
 # import relevant data model
+import uuid
 from models.data_models import StockRecord
 from datetime import date
 from typing import Optional, List
@@ -12,10 +13,10 @@ async def update_stock(item_id: str, quantity_change: int) -> bool:
     try:
         return await execute_write(
             """
-            INSERT INTO stock_records (item_id, quantity_change, timestamp)
-            VALUES (?, ?, ?)
+            INSERT INTO stock_records (id, item_id, quantity_change, timestamp)
+            VALUES (?, ?, ?, ?)
             """,
-            (item_id, quantity_change, date.today())
+            (str(uuid.uuid4()), item_id, quantity_change, date.today())
         )
     except Exception as e:
         print(f"Error updating stock: {e}")
@@ -26,10 +27,10 @@ async def record_stock_in(item_id: str, quantity: int, received_date: date) -> b
     try:
         return await execute_write(
             """
-            INSERT INTO stock_records (item_id, quantity_change, timestamp)
-            VALUES (?, ?, ?)
+            INSERT INTO stock_records (id, item_id, quantity_change, timestamp)
+            VALUES (?, ?, ?, ?)
             """,
-            (item_id, quantity, received_date)
+            (str(uuid.uuid4()), item_id, quantity, received_date)
         )
     except Exception as e:
         print(f"Error recording stock in: {e}")
@@ -38,20 +39,16 @@ async def record_stock_in(item_id: str, quantity: int, received_date: date) -> b
 async def record_stock_out(item_id: str, quantity: int, used_date: date) -> bool:
     """Record stock used/dispensed."""
     try:
-        await execute_write(
-            conn,
+        return await execute_write(
             """
-            INSERT INTO stock_records (item_id, quantity_change, timestamp)
-            VALUES (?, ?, ?)
+            INSERT INTO stock_records (id, item_id, quantity_change, timestamp)
+            VALUES (?, ?, ?, ?)
             """,
-            (item_id, -quantity, used_date)
+            (str(uuid.uuid4()), item_id, -quantity, used_date)
         )
-        return True
     except Exception as e:
         print(f"Error recording stock out: {e}")
         return False
-    finally:
-        await close_database()
 
 async def get_stock_history(
     item_id: str,
@@ -72,10 +69,8 @@ async def get_stock_history(
             query += " AND timestamp <= ?"
             params.append(end_date)
 
-        records = await fetch_all(conn, query, params)
+        records = await fetch_all(query, tuple(params))
         return [StockRecord(**record) for record in records]
     except Exception as e:
         print(f"Error fetching stock history: {e}")
         return []
-    finally:
-        await close_database()
