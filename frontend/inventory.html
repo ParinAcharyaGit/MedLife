@@ -194,7 +194,7 @@
 </div>
 <div>
 <p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Expired Products</p>
-<p class="font-headline-sm text-headline-sm font-bold text-error">12 Units</p>
+<p data-stat="expired" class="font-headline-sm text-headline-sm font-bold text-error">12 Units</p>
 </div>
 </div>
 <div class="bg-white border border-surface-variant p-md rounded-xl flex items-center gap-md">
@@ -203,7 +203,7 @@
 </div>
 <div>
 <p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Low Stock Levels</p>
-<p class="font-headline-sm text-headline-sm font-bold text-tertiary-container">48 Items</p>
+<p data-stat="low-stock" class="font-headline-sm text-headline-sm font-bold text-tertiary-container">48 Items</p>
 </div>
 </div>
 <div class="bg-white border border-surface-variant p-md rounded-xl flex items-center gap-md">
@@ -212,7 +212,7 @@
 </div>
 <div>
 <p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Stock Health</p>
-<p class="font-headline-sm text-headline-sm font-bold text-secondary">94% Optimal</p>
+<p data-stat="health" class="font-headline-sm text-headline-sm font-bold text-secondary">94% Optimal</p>
 </div>
 </div>
 </div>
@@ -230,7 +230,7 @@
     <td class="px-md py-4"><p class="text-xs font-mono text-outline">SN: [serial_number]</p><p class="text-xs font-mono text-outline">Batch: [batch_number]</p></td>
     <td class="px-md py-4 text-on-surface-variant">[date_of_purchase_formatted]</td>
     <td class="px-md py-4 font-medium text-on-surface">[expiry_date_formatted]</td>
-    <td class="px-md py-4 text-right"><div class="flex flex-col items-end"><span class="text-tertiary font-bold">[quantity] units</span><div class="w-16 h-1 bg-surface-variant rounded-full mt-1 overflow-hidden"><div class="h-full bg-tertiary-container" style="width: [stock_percentage]%"></div></div><span class="text-[10px] text-tertiary uppercase mt-1">[stock_status]</span></div></td>
+    <td class="px-md py-4 text-right"><div class="flex flex-col items-end"><span class="text-tertiary font-bold">[quantity] units</span><div class="w-16 h-1 bg-surface-variant rounded-full mt-1 overflow-hidden"><div class="h-full bg-tertiary-container" style="width: [stock_percentage]%"></div></div><span class="text-[10px] text-tertiary uppercase mt-1">[stock_status]</span><div class="flex items-center gap-1 mt-2"><button class="w-7 h-7 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors stock-out-btn" data-id="[id]" title="Remove 1 unit"><span class="material-symbols-outlined text-[16px]">remove</span></button><input type="number" min="1" value="1" class="w-12 text-center border border-outline-variant rounded font-body-md text-body-md py-1 stock-qty" data-id="[id]"/><button class="w-7 h-7 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors stock-in-btn" data-id="[id]" title="Add units"><span class="material-symbols-outlined text-[16px]">add</span></button></div></div></td>
     <td class="px-md py-4"><span class="px-2 py-1 bg-surface-container-high rounded text-xs">[shelf_location]</span></td>
     <td class="px-md py-4 text-on-surface-variant">[company_sourced_from]</td>
     <td class="px-md py-4 text-right font-medium">$[price] / unit</td>
@@ -241,7 +241,7 @@
 </div>
 <!-- Pagination / Footer -->
 <div class="px-md py-4 flex items-center justify-between bg-surface-container-lowest border-t border-surface-variant">
-<p class="text-label-md font-label-md text-on-surface-variant">Showing 1 to 4 of 1,420 entries</p>
+<p data-stat="showing" class="text-label-md font-label-md text-on-surface-variant">Showing 1 to 4 of 1,420 entries</p>
 <div class="flex items-center gap-2">
 <button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors">
 <span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
@@ -374,9 +374,49 @@
                         if (!resp.ok) throw new Error('Failed to delete');
                         // Remove row from DOM
                         delBtn.closest('tr').remove();
+                        // Refresh stats
+                        const remaining = await fetchInventory();
+                        updateStats(remaining);
                         alert('Item deleted');
                     } catch (err) {
                         alert('Error deleting item');
+                    }
+                    return;
+                }
+                const stockInBtn = e.target.closest('.stock-in-btn');
+                const stockOutBtn = e.target.closest('.stock-out-btn');
+                if (stockInBtn || stockOutBtn) {
+                    const btn = stockInBtn || stockOutBtn;
+                    const id = btn.dataset.id;
+                    const row = btn.closest('tr');
+                    const qtyInput = row.querySelector('.stock-qty');
+                    const qty = Math.max(1, parseInt(qtyInput.value) || 1);
+                    const endpoint = stockInBtn ? '/stock/in/' : '/stock/out/';
+                    btn.disabled = true;
+                    try {
+                        const resp = await fetch(`${endpoint}${id}?quantity=${qty}`, { method: 'POST' });
+                        if (!resp.ok) throw new Error('Failed to update stock');
+                        // Re-fetch the row to get the new quantity from the DB
+                        const fresh = await fetch(`/drug-items/${id}`);
+                        if (fresh.ok) {
+                            const item = await fresh.json();
+                            // Update the visible quantity in this row
+                            const qtySpan = row.querySelector('span.text-tertiary.font-bold');
+                            if (qtySpan) qtySpan.textContent = (item.quantity || 0) + ' units';
+                            // Update stock bar/status
+                            const stockInfo = getStockInfo(item.quantity || 0);
+                            const bar = row.querySelector('div.h-full.bg-tertiary-container');
+                            if (bar) bar.style.width = stockInfo.percent + '%';
+                            const statusSpan = row.querySelector('span.text-\\[10px\\].text-tertiary.uppercase');
+                            if (statusSpan) statusSpan.textContent = stockInfo.status;
+                        }
+                        // Refresh stats
+                        const all = await fetchInventory();
+                        updateStats(all);
+                    } catch (err) {
+                        alert('Error updating stock: ' + err.message);
+                    } finally {
+                        btn.disabled = false;
                     }
                 }
             });
@@ -438,10 +478,15 @@
             const optimalCount = items.filter(item => (item.quantity || 0) >= 50).length;
             const stockHealthPercent = items.length > 0 ? Math.round((optimalCount / items.length) * 100) : 0;
 
-            // Update the DOM elements
-            document.querySelector('.bg-white:nth-child(1) .font-headline-sm').textContent = expiredCount + ' Units';
-            document.querySelector('.bg-white:nth-child(2) .font-headline-sm').textContent = lowStockCount + ' Items';
-            document.querySelector('.bg-white:nth-child(3) .font-headline-sm').textContent = stockHealthPercent + '% Optimal';
+            // Update the DOM elements using the data-stat attribute for stability.
+            const expiredEl = document.querySelector('[data-stat="expired"]');
+            const lowStockEl = document.querySelector('[data-stat="low-stock"]');
+            const healthEl = document.querySelector('[data-stat="health"]');
+            const showingEl = document.querySelector('[data-stat="showing"]');
+            if (expiredEl) expiredEl.textContent = expiredCount + ' Units';
+            if (lowStockEl) lowStockEl.textContent = lowStockCount + ' Items';
+            if (healthEl) healthEl.textContent = stockHealthPercent + '% Optimal';
+            if (showingEl) showingEl.textContent = `Showing 1 to ${items.length} of ${items.length} entries`;
         }
     </script>
 

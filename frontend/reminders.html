@@ -533,7 +533,13 @@
                 tbody.appendChild(tr);
             }
 
-            // Initial load
+            // Initial load: ask the backend to auto-generate expiry reminders first so the page
+            // always reflects current inventory, then fetch the resulting list.
+            try {
+                await fetch('/reminders/auto-generate', { method: 'POST' });
+            } catch (err) {
+                console.error('Auto-generate failed:', err);
+            }
             const reminders = await fetchReminders();
             const drugItems = await fetchDrugItems();
             // Clear existing rows
@@ -567,17 +573,21 @@
 
         // Update stats based on reminders data
         function updateStats(reminders) {
-            // Calculate expired reminders (those with status containing "Expired")
-            const expiredCount = reminders.filter(r =>
-                r.status && r.status.toLowerCase().includes('expired')
-            ).length;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
 
-            // Calculate expiring soon (those with status containing "Expiring in")
-            const expiringSoonCount = reminders.filter(r =>
-                r.status && r.status.toLowerCase().includes('expiring in')
-            ).length;
-
-            // Total alerts is just the length of reminders array
+            // Recompute status from reminder_date (API doesn't return a pre-computed status).
+            let expiredCount = 0;
+            let expiringSoonCount = 0;
+            for (const r of reminders) {
+                if (!r.reminder_date) continue;
+                const d = new Date(r.reminder_date);
+                if (d < today) {
+                    expiredCount += 1;
+                } else {
+                    expiringSoonCount += 1;
+                }
+            }
             const totalAlerts = reminders.length;
 
             // Update the DOM elements

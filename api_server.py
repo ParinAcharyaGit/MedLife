@@ -122,19 +122,35 @@ class ReminderOut(BaseModel):
     sent_at: Optional[date] = None
 
 
+def _to_jsonable(value):
+    """Recursively convert dataclass instances and date/datetime values to JSON-safe types."""
+    if value is None:
+        return None
+    if hasattr(value, "__dict__") and not isinstance(value, (str, bytes, int, float, bool)):
+        return {k: _to_jsonable(v) for k, v in value.__dict__.items()}
+    if isinstance(value, (list, tuple)):
+        return [_to_jsonable(v) for v in value]
+    if isinstance(value, dict):
+        return {k: _to_jsonable(v) for k, v in value.items()}
+    # datetime/date have isoformat
+    if hasattr(value, "isoformat"):
+        return value.isoformat()
+    return value
+
+
 def _item_to_dict(item) -> dict:
     """Convert a DrugItem dataclass into a plain JSON-serializable dict."""
-    return item.__dict__ if item is not None else None
+    return _to_jsonable(item) if item is not None else None
 
 
 def _stock_record_to_dict(record) -> dict:
     """Convert a StockRecord dataclass into a plain JSON-serializable dict."""
-    return record.__dict__ if record is not None else None
+    return _to_jsonable(record) if record is not None else None
 
 
 def _reminder_to_dict(reminder) -> dict:
     """Convert a Reminder dataclass into a plain JSON-serializable dict."""
-    return reminder.__dict__ if reminder is not None else None
+    return _to_jsonable(reminder) if reminder is not None else None
 
 
 # --- Routes --------------------------------------------------------------
